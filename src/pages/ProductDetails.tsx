@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import ProductReview from '@/components/ProductReview';
 import { Button } from '@/components/ui/button';
 import { useSingleProductQuery } from '@/redux/features/products/productApi';
