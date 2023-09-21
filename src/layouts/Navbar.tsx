@@ -12,8 +12,22 @@ import {
 import { HiOutlineSearch } from 'react-icons/hi';
 import Cart from '../components/Cart';
 import logo from '../assets/images/technet-logo.png';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { setUser } from '@/redux/features/user/userSlice';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default function Navbar() {
+
+  const dispatch = useAppDispatch()
+
+  const  {user} = useAppSelector(state => state.user)
+
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      dispatch(setUser(null))
+    })
+  }
   return (
     <nav className="w-full h-16 fixed top backdrop-blur-lg z-10">
       <div className="h-full w-full bg-white/60">
@@ -63,16 +77,29 @@ export default function Navbar() {
                     <DropdownMenuItem className="cursor-pointer">
                       Billing
                     </DropdownMenuItem>
-                    <Link to="/login">
-                      <DropdownMenuItem className="cursor-pointer">
-                        login
-                      </DropdownMenuItem>
-                    </Link>
-                    <Link to="/signup">
-                      <DropdownMenuItem className="cursor-pointer">
-                        signup
-                      </DropdownMenuItem>
-                    </Link>
+                    {
+                      !user.email ?
+                      <>
+                        <Link to="/login">
+                        <DropdownMenuItem className="cursor-pointer">
+                          login
+                        </DropdownMenuItem>
+                        </Link>
+                        <Link to="/signup">
+                          <DropdownMenuItem className="cursor-pointer">
+                              signup
+                          </DropdownMenuItem>
+                        </Link>
+                      </>
+                      :
+                      <>
+                        <Link onClick={handleLogout} to="/">
+                            <DropdownMenuItem className="cursor-pointer">
+                              logout
+                            </DropdownMenuItem>
+                        </Link>
+                      </>
+                    } 
                   </DropdownMenuContent>
                 </DropdownMenu>
               </li>
